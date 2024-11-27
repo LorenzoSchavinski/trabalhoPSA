@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: meu_usuario
+      POSTGRES_PASSWORD: minha_senha
+      POSTGRES_DB: meu_banco
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  student:
+    build:
+      context: ./student
+    container_name: student_service
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/meu_banco
+      SPRING_DATASOURCE_USERNAME: meu_usuario
+      SPRING_DATASOURCE_PASSWORD: minha_senha
+    depends_on:
+      - postgres
+
+  discipline:
+    build:
+      context: ./discipline
+    container_name: discipline_service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/meu_banco
+      SPRING_DATASOURCE_USERNAME: meu_usuario
+      SPRING_DATASOURCE_PASSWORD: minha_senha
+    depends_on:
+      - postgres
+
+  enroll:
+    build:
+      context: ./enroll
+    container_name: enroll_service
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/meu_banco
+      SPRING_DATASOURCE_USERNAME: meu_usuario
+      SPRING_DATASOURCE_PASSWORD: minha_senha
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

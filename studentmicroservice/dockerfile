@@ -1,0 +1,14 @@
+# Usar a imagem oficial do JDK como base
+FROM openjdk:17-jdk-slim
+
+# Definir o diretório de trabalho no container
+WORKDIR /app
+
+# Copiar o JAR do microserviço para o container
+COPY target/*.jar app.jar
+
+# Expôr a porta
+EXPOSE 8081
+
+# Comando para executar o microserviço
+ENTRYPOINT ["java", "-jar", "app.jar"]
